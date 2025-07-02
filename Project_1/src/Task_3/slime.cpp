@@ -7,6 +7,7 @@ Slime::Slime(string name)
 {
     if (name == "Green") {
         property = GRASS;
+        maxHp = 110;
         hp = 110;
         attack = 10;
         defense = 10;
@@ -15,6 +16,7 @@ Slime::Slime(string name)
         skills.push_back(Skill(SkillType::LEAF));
     } else if (name == "Red") {
         property = FIRE;
+        maxHp = 110;
         hp = 100;
         attack = 11;
         defense = 10;
@@ -24,6 +26,7 @@ Slime::Slime(string name)
     } else if (name == "Blue") {
         property = PropertyType::WATER;
         hp = 100;
+        maxHp = 110;
         attack = 10;
         defense = 11;
         speed = 9;
@@ -44,11 +47,23 @@ bool Slime::isSuppress(Slime* other) const {
 
 vector<Skill> Slime::getSkills() const { return skills; }
 int Slime::getHp() const { return hp; }
-int Slime::getAttack() const { return attack; }
+int Slime::getAttack() const {
+    if (doubleAttack) return attack * 2;
+    return attack;
+}
 int Slime::getDefense() const { return defense; }
 int Slime::getSpeed() const { return speed; }
 PropertyType Slime::getProperty() const { return property; }
+bool Slime::getDoubleAttack() const { return doubleAttack; }
 
 void Slime::addHp(int delta) {
     hp += delta;
+}
+
+void Slime::revive() {
+    hp = maxHp / 2;
+}
+
+bool Slime::setDoubleAttack(bool newDoubleAttack) {
+    doubleAttack = newDoubleAttack;
 }

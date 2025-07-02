@@ -3,7 +3,8 @@
 
 #include "slime.h"
 
-enum ActionType {SKILL, CHANGE};
+enum ActionType {SKILL, CHANGE, POTION};
+enum PotionType {REVIVAL, ATTACK};
 
 class Action {
 protected:
@@ -16,6 +17,7 @@ public:
     virtual int getPriority() const { return priority; }
     virtual const Skill& getSkill() const {}
     virtual Slime* getSlime() const {}
+    virtual PotionType getPotionType() const {}
     virtual ActionType getType() const {}
 };
 
@@ -37,6 +39,17 @@ public:
     int getPriority() const override { return 6; }
     Slime* getSlime() const { return slime; }
     ActionType getType() const override { return CHANGE; }
+};
+
+class PotionAction : public Action {
+    Slime* slime;
+    PotionType potionType;
+public:
+    PotionAction(Slime* s, PotionType potionType) : Action(false), slime(s), potionType(potionType) { priority = 6; }
+    int getPriority() const override { return 5; }
+    Slime* getSlime() const { return slime; }
+    PotionType getPotionType() const override { return potionType; }
+    ActionType getType() const override { return POTION; }
 };
 
 #endif
