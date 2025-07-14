@@ -29,27 +29,27 @@ public:
     DefaultedMap<std::string, int, 0> attr;     // 动态属性，如剩余药剂数量等
 };
 
-class SunnyActor : public Actor {
-public:
-    ~SunnyActor() override = default;
-    std::vector<Pet_T> ChooseStartingPet() override;
-    Action_T ChooseAction() override;
-    Pet_T ChoosePet(bool) override;
-    Skill_T ChooseSkill() override;
-    std::string GetName() override;
-};
-
-// class RainyActor : public Actor {
+// class SunnyActor : public Actor {
 // public:
-//     RainyActor();
-//     ~RainyActor() override = default;
+//     ~SunnyActor() override = default;
 //     std::vector<Pet_T> ChooseStartingPet() override;
 //     Action_T ChooseAction() override;
 //     Pet_T ChoosePet(bool) override;
 //     Skill_T ChooseSkill() override;
-//     PotionInfo ChoosePotion() override;
 //     std::string GetName() override;
 // };
+
+class RainyActor : public Actor {
+public:
+    RainyActor();
+    ~RainyActor() override = default;
+    std::vector<Pet_T> ChooseStartingPet() override;
+    Action_T ChooseAction() override;
+    Pet_T ChoosePet(bool) override;
+    Skill_T ChooseSkill() override;
+    PotionInfo ChoosePotion() override;
+    std::string GetName() override;
+};
 
 class HumanActor : public Actor {
 public:

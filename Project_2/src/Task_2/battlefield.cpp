@@ -92,24 +92,26 @@ std::vector<ActionInfo> BattleField::ChooseActionPhase_() {
     for (Actor* actor : this->actors_) {
         while (true) {
             Action_T chosenAction = actor->ChooseAction();
-            union {
-                Pet_T pet;
-                Skill_T skill;
-                PotionInfo potion;
-            } u;
+            
+            ActionInfo actionInfo;
+            actionInfo.action = chosenAction;
+            actionInfo.actor = actor;
+            actionInfo.priority = allActions.at(chosenAction).priority;
+
             if (chosenAction == Action_T::Change) {
-                u.pet = actor->ChoosePet(true);
-                if (u.pet == Pet_T::BACK) continue;
+                Pet_T pet = actor->ChoosePet(true);
+                if (pet == Pet_T::BACK) continue;
+                actionInfo.u.pet = pet;
             } else if (chosenAction == Action_T::Skill) {
-                u.skill = actor->ChooseSkill();
-                if (u.skill == Skill_T::BACK) continue;
+                Skill_T skill = actor->ChooseSkill();
+                if (skill == Skill_T::BACK) continue;
+                actionInfo.priority = allSkills.at(skill).priority;
+                actionInfo.u.skill = skill;
+            } else if (chosenAction == Action_T::Potion) {
+                PotionInfo potion = actor->ChoosePotion();
+                actionInfo.u.potion = potion;
             }
-            ActionInfo actionInfo = ActionInfo{
-                chosenAction,
-                actor,
-                chosenAction == Action_T::Skill ? allSkills.at(u.skill).priority : allActions.at(chosenAction).priority,
-                u.pet,
-            };
+            
             actions.push_back(actionInfo);
             break;
         }
@@ -160,6 +162,15 @@ bool BattleField::PerformActionPhase_(std::vector<ActionInfo> &actions) {
             actionInfo.actor->availPets.erase(actionInfo.u.pet);
             LOG(actionInfo.actor->GetName(), "sends", actionInfo.actor->petOnCourt.petName);
             LOG("\n");
+        } else if (actionInfo.action == Action_T::Potion) {
+            if (actionInfo.u.potion.potionT == Potion_T::Revival) {
+                actionInfo.actor->grave.at(actionInfo.u.potion.petT).health = int(round(0.5 * allPets.at(actionInfo.u.potion.petT).health));
+                actionInfo.actor->availPets[actionInfo.u.potion.petT] = actionInfo.actor->grave.at(actionInfo.u.potion.petT);
+                actionInfo.actor->grave.erase(actionInfo.u.potion.petT);
+            }
+            LOG(actionInfo.actor->GetName(), "uses", allPotions.at(actionInfo.u.potion.potionT).potionName, "on", allPets.at(actionInfo.u.potion.petT).petName);
+            LOG("\n");
+            actionInfo.actor->attr["revivalPotion"] -= 1;
         }
     }
     
