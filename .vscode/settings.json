@@ -62,7 +62,9 @@
         "xlocnum": "cpp",
         "xloctime": "cpp",
         "xstring": "cpp",
-        "xtr1common": "cpp"
+        "xtr1common": "cpp",
+        "deque": "cpp",
+        "stack": "cpp"
     },
     "C_Cpp.default.compilerPath": "D:/1_Apps/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe"
 }
