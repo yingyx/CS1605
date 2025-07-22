@@ -27,7 +27,7 @@
 *.lib
 
 # Executables
-*.exe
+battlefield.exe
 # *.out
 *.app
 *.zip
