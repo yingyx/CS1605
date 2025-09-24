@@ -31,3 +31,5 @@ battlefield.exe
 # *.out
 *.app
 *.zip
+.vscode/
+*/doc
